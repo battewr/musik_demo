@@ -2,9 +2,25 @@
     window.musikIntegration = new Object();
     thisRef = musikIntegration;
 
-    thisRef.Startup = function (connectionPromise, postureRatingPromise) {
+    thisRef.Startup = function (connectionPromise, postureRatingPromise, localOnTick) {
         console.log("starting musik api...");
         muzik.startServer();
+
+        thisRef.calibrated = false;
+        thisRef.lastOrientation = {};
+        thisRef.calibratedValues = {};
+
+        thisRef.connectionPromise = connectionPromise;
+        thisRef.postureRatingPromise = postureRatingPromise;
+        thisRef.onTick = localOnTick;
+
+        muzik.registerForConnectionState(thisRef.onStateChanged);
+
+        muzik.registerForAccelerometerDataStream(thisRef.accelerometerTick);
+    }
+
+    thisRef.Resume = function (connectionPromise, postureRatingPromise) {
+        console.log("resuming musik api...");
 
         thisRef.calibrated = false;
         thisRef.lastOrientation = {};
@@ -25,9 +41,13 @@
         thisRef.calibrated = true;
     }
 
+    var tick = 0;
     thisRef.accelerometerTick = function (x, y, z, norm, forwardAngle, sideAngle) {
         thisRef.lastOrientation.forwardAngle = forwardAngle;
         thisRef.lastOrientation.sideAngle = sideAngle;
+
+        tick = tick + 1;
+        thisRef.onTick(tick);
 
         if (thisRef.calibrated) {
             thisRef.howBadIsMyPosture(forwardAngle, sideAngle);

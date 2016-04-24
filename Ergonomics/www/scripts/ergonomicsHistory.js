@@ -1,21 +1,18 @@
-﻿//(function () {
+﻿(function () {
 
-//    window.ergonomicsHistory = new Object();
-//    thisRef = ergonomicsHistory;
+    window.ergonomicsHistory = new Object();
+    ergRef = ergonomicsHistory;
+    ergRef.history = new Array();
 
-//    thisRef.initialize = function () {
-//        thisRef._history = [];
-//    }
+    ergRef.append = function (newValue) {
+        if (ergRef.history.length > 10) {
+            ergRef.history = ergRef.history.slice(1, ergRef.history.length);
+        }
 
-//    thisRef.append = function (newValue) {
-//        if (thisRef._history.length > 10) {
-//            thisRef._history = thisRef._history.slice(1, thisRef._history.length);
-//        }
+        ergRef.history.push(newValue);
+    }
 
-//        thisRef._history.push(newValue);
-//    }
-
-//    thisRef.currentArray = function () {
-//        return thisRef._history;
-//    }
-//}());
+    ergRef.currentArray = function () {
+        return ergRef.history;
+    }
+}());

@@ -18,47 +18,54 @@
         document.getElementById('calibrateAction').addEventListener('click', onCalibrate, false);
 
         //console.log("testing...")
-        musikIntegration.Startup(connectionState, postureRating);
+        musikIntegration.Startup(connectionState, postureRating, onTick);
 
-        //setupGraph();
+        setupGraph(true);
     };
 
 
-    //function setupGraph() {
-    //    $('#container').highcharts({
-    //        title: {
-    //            text: 'Average Ergonomics',
-    //            x: -20 //center
-    //        },
-    //        xAxis: {
-    //            categories: ['', '', '', '', '', '',
-    //                '', '', '', '', '', '']
-    //        },
-    //        yAxis: {
-    //            title: {
-    //                text: 'Ergonomic Rating'
-    //            },
-    //            plotLines: [{
-    //                value: 0,
-    //                width: 1,
-    //                color: '#808080'
-    //            }]
-    //        },
-    //        tooltip: {
-    //            valueSuffix: ''
-    //        },
-    //        legend: {
-    //            layout: 'vertical',
-    //            align: 'right',
-    //            verticalAlign: 'middle',
-    //            borderWidth: 0
-    //        },
-    //        series: [{
-    //            name: 'Tokyo',
-    //            data: [0,0,0,0,0,0,0,0,0,0]
-    //        }]
-    //    });
-    //}
+    function setupGraph(init) {
+
+        if (init) {
+            for (var i = 0; i < 10; i++) {
+                ergonomicsHistory.append(0);
+            }
+        }
+
+        $('#container').highcharts({
+            title: {
+                text: 'Average Ergonomics',
+                x: -20 //center
+            },
+            xAxis: {
+                categories: ['', '', '', '', '', '',
+                    '', '', '', '', '', '']
+            },
+            yAxis: {
+                title: {
+                    text: 'Ergonomic Rating'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                valueSuffix: ''
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'middle',
+                borderWidth: 0
+            },
+            series: [{
+                name: '',
+                data: ergonomicsHistory.currentArray()
+            }]
+        });
+    }
 
     function connectionState(newState) {
         if (!newState) {
@@ -86,6 +93,13 @@
 
         var avg = (sum / cnt).toFixed(2);
         $('#averageScore').text("At: " + avg);
+
+        timepassed += 1;
+        if (timepassed > 50) {
+            timepassed = 0;
+            ergonomicsHistory.append(rating);
+            setupGraph(false);
+        }
     }
 
 
@@ -93,10 +107,21 @@
         // TODO: This application has been suspended. Save application state here.
     };
 
+    var resumeCount = 0;
     function onResume() {
-        musikIntegration.Startup(connectionState, postureRating);
+        //window.alert('resuming.. ');
+
+        // musikIntegration.Startup(connectionState, postureRating);
+        //musikIntegration.Resume(connectionState, postureRating);
+        //resumeCount = resumeCount + 1;
+        //$('#resumeCount').text(' ' + resumeCount);
+        
         // TODO: This application has been reactivated. Restore application state here.
     };
+
+    function onTick(tickNumber) {
+        $('#tickCount').text(' ' + tickNumber);
+    }
 
     function onCalibrate() {
         musikIntegration.takeCalibrationTick();
