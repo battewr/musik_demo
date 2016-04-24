@@ -1,0 +1,27 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {}
+    },
+    "installed_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "Ergonomics"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "Ergonomics"
+        },
+        "cordova-plugin-media": {
+            "PACKAGE_NAME": "Ergonomics"
+        },
+        "cordova-plugin-muzik": {
+            "PACKAGE_NAME": "Ergonomics"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "Ergonomics"
+        }
+    },
+    "dependent_plugins": {}
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Ergonomics",
+  "dependencies": {
+    "angular": "1.5.5",
+    "jQuery": "2.2.3",
+    "bootstrap": "3.3.6",
+    "Chart.js": "2.0.2"
+  }
+}
